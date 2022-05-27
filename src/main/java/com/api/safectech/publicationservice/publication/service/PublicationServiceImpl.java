@@ -1,10 +1,13 @@
 package com.api.safectech.publicationservice.publication.service;
 
+import com.api.safectech.publicationservice.publication.client.TechnicalClient;
 import com.api.safectech.publicationservice.publication.domain.model.entity.Publication;
+import com.api.safectech.publicationservice.publication.domain.model.entity.Technical;
 import com.api.safectech.publicationservice.publication.domain.persistence.PublicationRepository;
 import com.api.safectech.publicationservice.publication.domain.service.PublicationService;
 import com.api.safectech.publicationservice.shared.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +21,9 @@ public class PublicationServiceImpl implements PublicationService {
     @Autowired
     private PublicationRepository publicationRepository;
 
+    @Autowired
+    TechnicalClient technicalClient;
+
 
     @Override
     public List<Publication> getAll() {
@@ -26,8 +32,15 @@ public class PublicationServiceImpl implements PublicationService {
 
     @Override
     public Publication getById(Long publicationId) {
-        return publicationRepository.findById(publicationId)
-                .orElseThrow(()-> new ResourceNotFoundException(ENTITY, publicationId));
+
+        Publication publication = publicationRepository.findById(publicationId)
+                .orElseThrow(() -> new ResourceNotFoundException(ENTITY, publicationId));
+        if (null != publication) {
+            Technical technical = technicalClient.getById(publication.getTechnicalId()).getBody();
+            publication.setTechnical(technical);
+        }
+        return publication;
+        //return publicationRepository.findById(publicationId).orElseThrow(()-> new ResourceNotFoundException(ENTITY, publicationId));
     }
 
     @Override

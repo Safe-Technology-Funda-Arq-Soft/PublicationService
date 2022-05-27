@@ -37,6 +37,8 @@ public class Publication extends AuditModel {
     private String urlImage;
 
     @NotNull
-    private Integer technicalId;
+    private Long technicalId;
 
+    @Transient
+    private Technical technical;
 }
