@@ -28,7 +28,10 @@ public class Comment {
     private String comment;
 
     @NotNull
-    private Integer userId;
+    private Long userId;
+
+    @Transient
+    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "publication_id", nullable = false)

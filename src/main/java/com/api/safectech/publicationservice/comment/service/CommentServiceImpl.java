@@ -1,6 +1,8 @@
 package com.api.safectech.publicationservice.comment.service;
 
+import com.api.safectech.publicationservice.comment.client.UserClient;
 import com.api.safectech.publicationservice.comment.domain.model.entity.Comment;
+import com.api.safectech.publicationservice.comment.domain.model.entity.User;
 import com.api.safectech.publicationservice.comment.domain.persistence.CommentRepository;
 import com.api.safectech.publicationservice.comment.domain.service.CommentService;
 import com.api.safectech.publicationservice.publication.domain.model.entity.Publication;
@@ -22,6 +24,8 @@ public class CommentServiceImpl implements CommentService {
     @Autowired
     private PublicationRepository publicationRepository;
 
+    @Autowired
+    UserClient userClient;
 
     @Override
     public List<Comment> getAll() {
@@ -30,8 +34,14 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public Comment getById(Long commentId) {
-        return commentRepository.findById(commentId)
-                .orElseThrow(()-> new ResourceNotFoundException(ENTITY, commentId));
+
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new ResourceNotFoundException(ENTITY, commentId));
+        if(null != comment) {
+            User user = userClient.getUserById(comment.getUserId()).getBody();
+            comment.setUser(user);
+        }
+        return comment;
     }
 
     @Override
