@@ -69,7 +69,7 @@ public class CommentController {
 
     @Operation(summary = "Get Commentary by user Id", description = "Get Commentary by user Id")
     @GetMapping("user/{userId}")
-    public List<CommentResource> getCommentaryByUser(@PathVariable Integer userId)
+    public List<CommentResource> getCommentaryByUser(@PathVariable Long userId)
     {
         return mapper.toResource(commentService.getByUserId(userId));
     }

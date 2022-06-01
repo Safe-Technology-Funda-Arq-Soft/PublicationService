@@ -73,7 +73,7 @@ public class CommentServiceImpl implements CommentService {
         return commentRepository.findByPublicationId(publicationId);
     }
     @Override
-    public List<Comment> getByUserId(Integer userId) {
+    public List<Comment> getByUserId(Long userId) {
         return commentRepository.findByUserId(userId);
     }
 }

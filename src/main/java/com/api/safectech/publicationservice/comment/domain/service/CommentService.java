@@ -12,5 +12,5 @@ public interface CommentService {
     Comment update(Long commentId, Comment request);
     ResponseEntity<?> delete(Long commentId);
     List<Comment> getByPublicationId(Long publicationId);
-    List<Comment> getByUserId(Integer userId);
+    List<Comment> getByUserId(Long userId);
 }
